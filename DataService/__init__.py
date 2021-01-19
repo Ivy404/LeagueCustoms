@@ -6,7 +6,7 @@ class DataService:
     def __init__(self, APIKey, region):
         self.watcher = LolWatcher(APIKey)
         self.region = region
-        player_json = "player_dictionaries"
+        player_json = "../Controller/player_dictionaries"
         file = open(player_json, "r")
         self.player_dict = json.load(file)
         for x in self.player_dict:

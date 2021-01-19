@@ -53,17 +53,21 @@ class Team:
     def add_player(self, player):
         self.players.append(player)
 
-    def _rating(self):
+    def rating(self):
         rating = 0
         c = 0
         for x in self.players:
             if self.positions[c] == x.role:
-                rating += 1
+                rating += x.elo*0.5
             rating += x.elo
+            c += 1
         return rating
 
+    def get_players(self):
+        return self.players
+
     def __str__(self):
-        st = "Rating \t------->  " + str(self._rating()) + "\n"
+        st = "Rating \t------->  " + str(self.rating()) + "\n"
         for x in range(len(self.players)):
             st += self.positions[x] + ": \t" + str(self.players[x]) + "\n"
         return st
@@ -79,25 +83,29 @@ class CustomGame:
                 return x
 
     def generate_teams(self):
-        c = 0
-        team1 = Team()
-        team2 = Team()
-        subgroups = {}
-        for x in self.players:
-            if not x.elo in subgroups:
-                subgroups[x.elo] = [x]
-            else:
-                subgroups[x.elo].append(x)
-        for x in subgroups:
-            import random
-            random.shuffle(subgroups[x])
-            for y in subgroups[x]:
-                if c % 2: team1.add_player(y)
-                else: team2.add_player(y)
-                c += 1
+        exit = False
+        while not exit:
+            c = 0
+            team1 = Team()
+            team2 = Team()
+            subgroups = {}
+            for x in self.players:
+                if not x.elo in subgroups:
+                    subgroups[x.elo] = [x]
+                else:
+                    subgroups[x.elo].append(x)
+            for x in subgroups:
+                import random
+                random.shuffle(subgroups[x])
+                for y in subgroups[x]:
+                    if c % 2: team1.add_player(y)
+                    else: team2.add_player(y)
+                    c += 1
 
-        team1.randomize_positions()
-        team2.randomize_positions()
+            team1.randomize_positions()
+            team2.randomize_positions()
+            if abs(team1.rating() - team2.rating()) < 1.5:
+                exit = True
         return team1, team2
 
 
@@ -134,5 +142,9 @@ class PlayerList:
 
     def add_player(self, player):
         self.players[player.name] = player
+
+    def set_role(self, name, role):
+        if name in self.players:
+            self.players[name].set_role(role)
 
 

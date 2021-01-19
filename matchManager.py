@@ -1,6 +1,6 @@
 from riotwatcher import LolWatcher, ApiError
 
-watcher = LolWatcher('RGAPI-e561662e-1ff0-4ee6-ba49-d112454fddf5')
+watcher = LolWatcher('RGAPI-fedea5c1-8bdc-42c3-8a8a-27b6e1e1f907')
 
 region = 'euw1'
 
@@ -20,6 +20,8 @@ me = watcher.summoner.by_name(region, x)
 latest = watcher.data_dragon.versions_for_region(region)['n']['champion']
 # Lets get some champions static information
 static_champ_list = watcher.data_dragon.champions(latest, False, 'en_US')
+
+print(watcher.data_dragon.profile_icons(latest))
 
 # champ static list data to dict for looking up
 champ_dict = {}

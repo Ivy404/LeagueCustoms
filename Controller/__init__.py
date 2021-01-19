@@ -12,7 +12,7 @@ def joined(text):
     for x in f.readlines():
         offset = 2 if x[len(x) - 1] == "\n" else 1
         players.append(x[:len(x) - offset - len(text)])
-    return players
+    return players[:10]
 
 
 class Controller:
@@ -32,13 +32,18 @@ class Controller:
         plist = self.player_list.get_players_by_elo(players)
         cs = CustomGame(plist)
         team1, team2 = cs.generate_teams()
-        print(team1)
-        print(team2)
+        return team1, team2
 
     def close(self):
         self.data_service.save_to_file()
 
+    def set_role(self, name, role):
+        self.player_list.set_role(name, role)
 
-c = Controller('RGAPI-e561662e-1ff0-4ee6-ba49-d112454fddf5', 'euw1')
-c.new_game("text_test")
-c.close()
+
+
+
+# c = Controller('RGAPI-7f36b2d1-e00d-45e8-b38d-0c7ca26ce610', 'euw1')
+#
+# c.new_game("../Controller/text_test")
+# c.close()
