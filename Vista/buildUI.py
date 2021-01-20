@@ -11,7 +11,7 @@ file = open("../assets/player_dictionaries", "r")
 player_dict = json.load(file)
 file.close()
 
-maxplayers = 10
+MaxPlayers = 10
 
 class MainWindow:
     def __init__(self, root):
@@ -29,11 +29,11 @@ class MainWindow:
         addToAll = ttk.Button(repositoriFrame, text='Register')
         addToAll.grid(column=0, row=0, sticky=(N,W,E,S))
         # list of all users
-        listAll = Listbox(repositoriFrame, height=10, width=52)
-        scrollAll = ttk.Scrollbar(repositoriFrame, orient=VERTICAL, command=listAll.yview)
+        self.listAll = Listbox(repositoriFrame, height=10, width=52)
+        scrollAll = ttk.Scrollbar(repositoriFrame, orient=VERTICAL, command=self.listAll.yview)
         scrollAll.grid(column=1, row=1, sticky=(N,S))
-        listAll['yscrollcommand'] = scrollAll.set
-        listAll.grid(column=0, row=1)
+        self.listAll['yscrollcommand'] = scrollAll.set
+        self.listAll.grid(column=0, row=1)
         playersAll = list()
         for i in self.c.player_list.players:
             #listAll.insert('end', i)
@@ -41,21 +41,22 @@ class MainWindow:
         # playersAll.sort() no se si realmente va bien ordenarlos,
         # porque pone primero los que empiezan por mayusculas, luego las minusculas
         for i in playersAll:
-            listAll.insert('end', i)
+            self.listAll.insert('end', i)
 
         # up mid
         mid_bar = ttk.Frame(self.content, width= 128, height=128)
         mid_bar.grid(column=1, row=0, padx=16, pady=16)
         # add user to game
-        addToGame = ttk.Button(mid_bar, text='Add >>')
+        addToGame = ttk.Button(mid_bar, text='Add >>', command=lambda: self.addUser())
         addToGame.grid(column=0, row=0, pady=8)
         # remove user from game
-        removeFromGame = ttk.Button(mid_bar, text='<< Remove')
+        removeFromGame = ttk.Button(mid_bar, text='<< Remove', command=lambda: self.removeUser())
         removeFromGame.grid(column=0, row=1, pady=8)
-        profile = ttk.Button(mid_bar, text='Perfil')
+        profile = ttk.Button(mid_bar, text='Perfil', command=lambda: self.show_profile(Profile))
         profile.grid(column=0, row=2, pady=8)
         generateGame = ttk.Button(mid_bar, text='Generate')
         generateGame.grid(column=0, row=3, pady=8)
+
 
         # up right
         playerFrame = ttk.Frame(self.content, width= 128, height=128)
@@ -64,11 +65,11 @@ class MainWindow:
         fromLobby = ttk.Button(playerFrame, text='From lobby')
         fromLobby.grid(column=0, row=0, sticky=(N,W,E,S))
         # this should be a scroll list of the users that will play
-        listPlayers = Listbox(playerFrame, height=10, width=52)
-        scrollPlayers = ttk.Scrollbar(playerFrame, orient=VERTICAL, command=listPlayers.yview)
+        self.listPlayers = Listbox(playerFrame, height=10, width=52)
+        scrollPlayers = ttk.Scrollbar(playerFrame, orient=VERTICAL, command=self.listPlayers.yview)
         scrollPlayers.grid(column=1, row=1, sticky=(N,S))
-        listPlayers['yscrollcommand'] = scrollAll.set
-        listPlayers.grid(column=0, row=1)
+        self.listPlayers['yscrollcommand'] = scrollAll.set
+        self.listPlayers.grid(column=0, row=1)
 
         # down left
         # this should have all the data for team 1
@@ -175,6 +176,33 @@ class MainWindow:
             if name:
                 self.new = Toplevel(self.root)
                 _class(self.new, name, self.c)"""
+
+    def show_profile(self, _class):
+        try:
+            if self.new.state() == "normal":
+                self.new.focus()
+        except:
+            name = None
+            try:
+                name = self.listAll.get(self.listAll.curselection()[0])
+            except IndexError:
+                try:
+                    name = self.ls2.get(self.ls2.curselection()[0])
+                except IndexError:
+                    name = None
+            if name:
+                self.new = Toplevel(self.root)
+                _class(self.new, name, self.c)
+
+    def removeUser(self):
+        if(0 < len(self.listAll.curselection())):
+            self.listPlayers.delete(self.listPlayers.curselection()[0])
+
+    def addUser(self):
+        if(0 < len(self.listAll.curselection()) and len(self.listPlayers.curselection()) < MaxPlayers):
+            self.listPlayers.insert('end', self.listAll.get(self.listAll.curselection()[0]))
+        pass
+
 
 class GetFromLobby:
     def __init__(self, root):
