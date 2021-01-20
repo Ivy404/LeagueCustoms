@@ -6,7 +6,7 @@ from PIL import ImageTk, Image
 from Controller import joined
 import Controller
 
-file = open("../Controller/player_dictionaries", "r")
+file = open("../assets/player_dictionaries", "r")
 player_dict = json.load(file)
 file.close()
 

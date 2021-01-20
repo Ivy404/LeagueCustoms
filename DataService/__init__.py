@@ -8,7 +8,7 @@ class DataService:
     def __init__(self, APIKey, region):
         self.watcher = LolWatcher(APIKey)
         self.region = region
-        player_json = "../Controller/player_dictionaries"
+        player_json = "../assets/player_dictionaries"
         file = open(player_json, "r")
         self.player_dict = json.load(file)
         for x in self.player_dict:
@@ -38,7 +38,7 @@ class DataService:
         self.player_dict = dic
 
     def save_to_file(self):
-        file = open("../Controller/player_dictionaries", "w")
+        file = open("../assets/player_dictionaries", "w")
         dc = dict()
         for x in self.player_dict:
             dc[x] = self.player_dict[x].to_dict()
@@ -46,13 +46,13 @@ class DataService:
         file.close()
 
     def remove_from_file(self, name):
-        file = open("../Controller/player_dictionaries", "r")
+        file = open("../assets/player_dictionaries", "r")
         self.player_dict = json.load(file)
         for x in self.player_dict:
             if x != name:
                 self.player_dict[x] = Model.from_dict(self.player_dict[x])
         file.close()
-        file = open("../Controller/player_dictionaries", "w")
+        file = open("../assets/player_dictionaries", "w")
         dc = dict()
         for x in self.player_dict:
             dc[x] = self.player_dict[x].to_dict()
