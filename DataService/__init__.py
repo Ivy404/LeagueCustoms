@@ -1,6 +1,8 @@
 from riotwatcher import LolWatcher, ApiError
 import Model
 import json
+import requests
+import shutil
 
 class DataService:
     def __init__(self, APIKey, region):
@@ -58,4 +60,10 @@ class DataService:
         file.close()
 
     def get_icon(self, name):
-        pass
+        summoner = self.watcher.summoner.by_name(self.region, name)
+        iconUrl = 'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/' \
+                  + str(summoner['profileIconId']) + '.png'
+        response = requests.get(iconUrl, stream=True)
+        with open('../assets/SummonerIcons/img.png', 'wb') as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        del response
