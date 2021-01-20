@@ -6,6 +6,7 @@ def from_dict(dic):
     p.id = dic["ID"]
     p.elo = dic["ELO"]
     p.role = dic["ROLE"]
+    p.rank = dic["RANKED"]
     return p
 
 
@@ -17,8 +18,10 @@ class Player:
         self.id = ID
         self.elo = 0
         self.role = ""
+        self.rank = ""
 
     def set_elo(self, elo):
+        self.rank = elo
         if elo == "IRON" or elo == "BRONZE":
             self.elo = 1
         elif elo == "SILVER" or elo == "UNRANKED":
@@ -40,7 +43,7 @@ class Player:
         return self.elo < other.elo
 
     def to_dict(self):
-        return {"NAME": self.name,"ID": self.id,"ELO": self.elo, "ROLE" : self.role}
+        return {"NAME": self.name,"ID": self.id,"ELO": self.elo, "ROLE" : self.role, "RANKED" : self.rank}
 
 
 class Team:

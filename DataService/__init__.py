@@ -68,3 +68,10 @@ class DataService:
             shutil.copyfileobj(response.raw, out_file)
         del response
 
+    def get_rank(self, name):
+        summoner = self.watcher.summoner.by_name(self.region, name)
+        try:
+            return self.watcher.league.by_summoner(self.region, summoner['id'])[0]['tier']
+        except:
+            return "UNRANKED"
+

@@ -103,7 +103,9 @@ class Profile:
 
         # Labels, Combobox, etc.
 
+        # El Exum
         if name == "Kite Machine 2": name = "El Exum"
+
         self.name = Label(self.right_frame, text=name,font="none 24 bold")
         self.role = Label(self.role_frame, text="Role:")
         self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=("Top", "Jungle", "Mid", "ADC", "Support"))
@@ -113,7 +115,11 @@ class Profile:
         self.rating.grid(column=0, row=1)
 
         # Rank image
-        self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Gold.png")
+        rank = ctr.get_rank(name)
+        self.load_rank = Image.open("../assets/ranked_emblems/Emblem_" + rank[0] + rank[1:len(rank)].lower() + ".png")
+        # El Exum
+        if name == "El Exum": self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Challenger.png")
+
         self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_rank = ImageTk.PhotoImage(self.load_rank)
         self.rank_img = Label(self.left_frame, image=self.render_rank)

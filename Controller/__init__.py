@@ -43,8 +43,8 @@ class Controller:
     def get_icon(self, name):
         self.data_service.get_icon(name)
 
-
-
+    def get_rank(self, name):
+        return self.data_service.get_rank(name)
 
 
 # c = Controller('RGAPI-7f36b2d1-e00d-45e8-b38d-0c7ca26ce610', 'euw1')
