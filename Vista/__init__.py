@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 
 from PIL import ImageTk, Image
+from Model import constants
 from Controller import joined
 import Controller
 
@@ -29,7 +30,7 @@ class Win:
         lblFr1 = LabelFrame(content, height=100, width=200)
         lblFr2 = LabelFrame(content, height=100, width=200)
 
-        positions = ["Top", "Jungle", "Mid", "ADC", "Support"]
+        positions = constants.positions
         for x in positions:
             Label(lblFr1, text=x).grid()
             Label(lblFr2, text=x).grid()
