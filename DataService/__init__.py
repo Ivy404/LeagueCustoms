@@ -60,13 +60,18 @@ class DataService:
         file.close()
 
     def get_icon(self, name):
-        summoner = self.watcher.summoner.by_name(self.region, name)
-        iconUrl = 'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/' \
-                  + str(summoner['profileIconId']) + '.png'
-        response = requests.get(iconUrl, stream=True)
-        with open('../assets/SummonerIcons/img.png', 'wb') as out_file:
-            shutil.copyfileobj(response.raw, out_file)
-        del response
+        try:
+            summoner = self.watcher.summoner.by_name(self.region, name)
+            iconUrl = 'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/' \
+                      + str(summoner['profileIconId']) + '.png'
+            response = requests.get(iconUrl, stream=True)
+            with open('../assets/SummonerIcons/img.png', 'wb') as out_file:
+                shutil.copyfileobj(response.raw, out_file)
+            del response
+            return "../assets/SummonerIcons/img.png"
+        except:
+            return "../assets/SummonerIcons/default_icon.png"
+
 
     def get_rank(self, name):
         summoner = self.watcher.summoner.by_name(self.region, name)

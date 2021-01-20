@@ -41,7 +41,7 @@ class Controller:
         self.player_list.set_role(name, role)
 
     def get_icon(self, name):
-        self.data_service.get_icon(name)
+        return self.data_service.get_icon(name)
 
     def get_rank(self, name):
         return self.data_service.get_rank(name)

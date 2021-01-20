@@ -126,10 +126,10 @@ class Profile:
         self.rank_img.image = self.render_rank
 
         # Profile image
-        ctr.get_icon(name)
-        self.load_prof = Image.open("../assets/SummonerIcons/img.png")
+        imgFile = ctr.get_icon(name)
+        self.load_prof = Image.open(imgFile)
         # El Exum
-        if name == "El Exum": self.load_prof = Image.open("../Vista/test.jpg")
+        if name == "El Exum": self.load_prof = Image.open("../assets/SummonerIcons/default_icon.jpg")
 
         self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_prof = ImageTk.PhotoImage(self.load_prof)
