@@ -1,0 +1,1 @@
+positions = ["Top", "Jungle", "Mid", "ADC", "Support"]
