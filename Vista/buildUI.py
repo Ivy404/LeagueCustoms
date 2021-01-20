@@ -12,6 +12,7 @@ player_dict = json.load(file)
 file.close()
 
 MaxPlayers = 10
+UsersGame = set()
 
 class MainWindow:
     def __init__(self, root):
@@ -23,38 +24,38 @@ class MainWindow:
         self.content.grid(column=0, row=0)
 
         # Up left
-        self.repositoriFrame = ttk.Frame(self.content, width= 128, height=128)
-        self.repositoriFrame.grid(column=0, row=0, padx=16, pady=16)
+        repositoriFrame = ttk.Frame(self.content, width= 128, height=128)
+        repositoriFrame.grid(column=0, row=0, padx=16, pady=16)
         # add user to list
-        self.addToAll = ttk.Button(self.repositoriFrame, text='Register')
-        self.addToAll.grid(column=0, row=0, sticky=(N,W,E,S))
+        addToAll = ttk.Button(repositoriFrame, text='Register')
+        addToAll.grid(column=0, row=0, sticky=(N,W,E,S))
         # list of all users
-        self.listAll = Listbox(self.repositoriFrame, height=10, width=52)
-        self.scrollAll = ttk.Scrollbar(self.repositoriFrame, orient=VERTICAL, command=self.listAll.yview)
-        self.scrollAll.grid(column=1, row=1, sticky=(N,S))
-        self.listAll['yscrollcommand'] = self.scrollAll.set
+        self.listAll = Listbox(repositoriFrame, height=10, width=52)
+        scrollAll = ttk.Scrollbar(repositoriFrame, orient=VERTICAL, command=self.listAll.yview)
+        scrollAll.grid(column=1, row=1, sticky=(N,S))
+        self.listAll['yscrollcommand'] = scrollAll.set
         self.listAll.grid(column=0, row=1)
-        self.playersAll = list()
+        playersAll = list()
         for i in self.c.player_list.players:
             #listAll.insert('end', i)
-            self.playersAll.append(i)
+            playersAll.append(i)
         # playersAll.sort() no se si realmente va bien ordenarlos,
         # porque pone primero los que empiezan por mayusculas, luego las minusculas
-        for i in self.playersAll:
+        for i in playersAll:
             self.listAll.insert('end', i)
 
         # up mid
-        self.mid_bar = ttk.Frame(self.content, width= 128, height=128)
-        self.mid_bar.grid(column=1, row=0, padx=16, pady=16)
+        mid_bar = ttk.Frame(self.content, width= 128, height=128)
+        mid_bar.grid(column=1, row=0, padx=16, pady=16)
         # add user to game
-        self.addToGame = ttk.Button(self.mid_bar, text='Add >>', command=lambda: self.addUser())
-        self.addToGame.grid(column=0, row=0, pady=8)
+        addToGame = ttk.Button(mid_bar, text='Add >>', command=lambda: self.addUser())
+        addToGame.grid(column=0, row=0, pady=8)
         # remove user from game
         self.removeFromGame = ttk.Button(self.mid_bar, text='<< Remove', command=lambda: self.removeUser())
         self.removeFromGame.grid(column=0, row=1, pady=8)
         self.profile = ttk.Button(self.mid_bar, text='Profile', command=lambda: self.show_profile(Profile))
         self.profile.grid(column=0, row=2, pady=8)
-        self.generateGame = ttk.Button(self.mid_bar, text='Generate')
+        self.generateGame = ttk.Button(self.mid_bar, text='Generate', command=lambda: self.generateGame())
         self.generateGame.grid(column=0, row=3, pady=8)
 
 
@@ -74,7 +75,7 @@ class MainWindow:
         self.listPlayers = Listbox(self.playerFrame, height=10, width=52)
         self.scrollPlayers = ttk.Scrollbar(self.playerFrame, orient=VERTICAL, command=self.listPlayers.yview)
         self.scrollPlayers.grid(column=1, row=1, sticky=(N,S))
-        self.listPlayers['yscrollcommand'] = self.scrollAll.set
+        self.listPlayers['yscrollcommand'] = self.scrollPlayers.set
         self.listPlayers.grid(column=0, row=1)
 
         # down left
@@ -105,10 +106,11 @@ class MainWindow:
         # this should have all the data for team 2
         self.teamRedFrame = ttk.Frame(self.content, width= 128, height=128)
         self.teamRedFrame.grid(column=2, row=1, padx=16, pady=16)
-        self.teamRedTag = ttk.Label(self.teamRedFrame, text="Red team")
-        self.teamRedTag.grid(column=0, row=0)
+        self.teamRedLabel = ttk.Label(self.teamRedFrame, text="Red team")
+        self.teamRedLabel.grid(column=0, row=0)
         self.listRed = Listbox(self.teamRedFrame, height=5, width=52)
         self.listRed.grid(column=0, row=1)
+
 
 
     def show_profile(self, _class):
@@ -126,14 +128,39 @@ class MainWindow:
                 _class(self.new, name, self.c)
 
     def removeUser(self):
-        if 0 < len(self.listAll.curselection()):
+        if(0 < len(self.listPlayers.curselection())):
+            UsersGame.remove(self.listPlayers.get(self.listPlayers.curselection()[0]))
             self.listPlayers.delete(self.listPlayers.curselection()[0])
 
     def addUser(self):
-        if 0 < len(self.listAll.curselection()) and len(self.listPlayers.curselection()) < MaxPlayers:
-            self.listPlayers.insert('end', self.listAll.get(self.listAll.curselection()[0]))
-        pass
+        if(0 < len(self.listAll.curselection()) and self.listPlayers.size() < MaxPlayers
+        and not self.listAll.get(self.listAll.curselection()[0]) in UsersGame):
+            user = self.listAll.get(self.listAll.curselection()[0])
+            UsersGame.add(user)
+            self.listPlayers.insert('end', user)
 
+    def generateGame(self):
+        return
+        if(9 < self.listPlayers.size()):
+            #self.c.
+            self.listBlue.delete(0, END)
+            self.listRed.delete(0, END)
+            f = open("../Controller/text_test", "w", encoding="utf8")
+            print(self.txt.get("1.0", END), file=f)
+            f.close()
+
+            team1, team2 = self.c.new_game("../Controller/text_test")
+            self.c.close()
+            for x in team1.players:
+                self.listBlue.insert('end', x)
+            for x in team2.players:
+                self.listRed.insert('end', x)
+            self.t1.config(text="Team 1's Rating -> " + str(team1.rating()))
+            self.teamBlueLabel.config(text="Team 1's Rating -> " + str(team1.rating()))
+            self.t2.config(text="Team 2's Rating -> " + str(team2.rating()))
+            self.teamRedLabel.config(text="Team 2's Rating -> " + str(team2.rating()))
+            self.listBlue.update()
+            self.listRed.update()
 
 class GetFromLobby:
     def __init__(self, root):
