@@ -21,9 +21,9 @@ class Win:
         entry = ttk.Entry(self.root)
         self.txt = Text(self.root, height=10, width=50)
         self.bt = Button(self.frame, text="Generate!",width=20, command=lambda: self.generate_teams())
-        self.pf_button = Button(self.frame, text="Show Profile",width=20, command=lambda: self.show_profile(Profile))
         self.ls = Listbox(content, height=5, width=30)
         self.ls2 = Listbox(content, height=5, width=30)
+        self.pf_button = Button(self.frame, text="Show Profile",width=20, command=lambda: self.show_profile(Profile))
         self.t1 = Label(content, text="Team 1")
         self.t2 = Label(content, text="Team 2")
         lblFr1 = LabelFrame(content, height=100, width=200)
@@ -78,6 +78,13 @@ class Win:
                 self.new.focus()
         except:
             self.new = Toplevel(self.root)
+            try:
+                print(self.ls.get(self.ls.curselection()[0]))
+            except IndexError:
+                try:
+                    print(self.ls2.get(self.ls2.curselection()[0]))
+                except IndexError:
+                    print("No Player Selected")
             _class(self.new)
 
 

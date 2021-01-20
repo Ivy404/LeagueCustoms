@@ -9,7 +9,7 @@ region = 'euw1'
 x = 'Unkindłed One'
 me = watcher.summoner.by_name(region, x)
 
-
+print(me)
 
 # versions = watcher.data_dragon.versions_for_region(region)
 # champs = versions['n']['champion']
@@ -21,7 +21,7 @@ latest = watcher.data_dragon.versions_for_region(region)['n']['champion']
 # Lets get some champions static information
 static_champ_list = watcher.data_dragon.champions(latest, False, 'en_US')
 
-#print(watcher.data_dragon.profile_icons(latest))
+# print(watcher.data_dragon.profile_icons(latest))
 
 # champ static list data to dict for looking up
 champ_dict = {}
@@ -39,16 +39,16 @@ match_detail = watcher.match.by_id(region, last_match['gameId'])
 
 counter = 0
 
-"""for x in match_detail:
-    if x == 'participants':
-        print('participants :')
-        for y in match_detail[x]:
-            print('\t' , match_detail[x][counter]['participantId'])
-            for z in match_detail[x][counter]:
-                print('\t\t' + z,':', match_detail[x][counter][z])
-            counter += 1
-    else:
-        print(x, ':', match_detail[x])"""
+# for x in match_detail:
+#     if x == 'participants':
+#         print('participants :')
+#         for y in match_detail[x]:
+#             print('\t' , match_detail[x][counter]['participantId'])
+#             for z in match_detail[x][counter]:
+#                 print('\t\t' + z,':', match_detail[x][counter][z])
+#             counter += 1
+#     else:
+#         print(x, ':', match_detail[x])
 
 #
 # participants = []
