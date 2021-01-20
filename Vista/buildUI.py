@@ -45,17 +45,17 @@ class MainWindow:
             self.listAll.insert('end', i)
 
         # up mid
-        mid_bar = ttk.Frame(self.content, width= 128, height=128)
-        mid_bar.grid(column=1, row=0, padx=16, pady=16)
+        self.mid_bar = ttk.Frame(self.content, width= 128, height=128)
+        self.mid_bar.grid(column=1, row=0, padx=16, pady=16)
         # add user to game
-        addToGame = ttk.Button(mid_bar, text='Add >>', command=lambda: self.addUser())
-        addToGame.grid(column=0, row=0, pady=8)
+        self.addToGame = ttk.Button(self.mid_bar, text='Add >>', command=lambda: self.addUser())
+        self.addToGame.grid(column=0, row=0, pady=8)
         # remove user from game
         self.removeFromGame = ttk.Button(self.mid_bar, text='<< Remove', command=lambda: self.removeUser())
         self.removeFromGame.grid(column=0, row=1, pady=8)
         self.profile = ttk.Button(self.mid_bar, text='Profile', command=lambda: self.show_profile(Profile))
         self.profile.grid(column=0, row=2, pady=8)
-        self.generateGame = ttk.Button(self.mid_bar, text='Generate', command=lambda: self.generateGame())
+        self.generateGame = ttk.Button(self.mid_bar, text='Generate', command=lambda: self.generate_game())
         self.generateGame.grid(column=0, row=3, pady=8)
 
 
@@ -139,7 +139,7 @@ class MainWindow:
             UsersGame.add(user)
             self.listPlayers.insert('end', user)
 
-    def generateGame(self):
+    def generate_game(self):
         return
         if(9 < self.listPlayers.size()):
             #self.c.
