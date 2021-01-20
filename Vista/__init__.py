@@ -77,19 +77,21 @@ class Win:
             if self.new.state() == "normal":
                 self.new.focus()
         except:
-            self.new = Toplevel(self.root)
+            name = None
             try:
-                print(self.ls.get(self.ls.curselection()[0]))
+                name = self.ls.get(self.ls.curselection()[0])
             except IndexError:
                 try:
-                    print(self.ls2.get(self.ls2.curselection()[0]))
+                    name = self.ls2.get(self.ls2.curselection()[0])
                 except IndexError:
-                    print("No Player Selected")
-            _class(self.new)
+                    name = None
+            if name:
+                self.new = Toplevel(self.root)
+                _class(self.new, name, self.c)
 
 
 class Profile:
-    def __init__(self, root):
+    def __init__(self, root, name, ctr):
 
         self.root = root
 
@@ -99,7 +101,8 @@ class Profile:
         self.role_frame = Frame(self.right_frame)
 
         # Labels, Combobox, etc.
-        self.name = Label(self.right_frame, text="Kite Machine 2",font="none 24 bold")
+
+        self.name = Label(self.right_frame, text=name,font="none 24 bold")
         self.role = Label(self.role_frame, text="Role:")
         self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=("Top", "Jungle", "Mid", "ADC", "Support"))
         self.role.grid(column=0, row=0)
@@ -115,11 +118,14 @@ class Profile:
         self.rank_img.image = self.render_rank
 
         # Profile image
-        self.load_prof = Image.open("../Vista/test.jpg")
+        ctr.get_icon(name)
+        self.load_prof = Image.open("../assets/SummonerIcons/img.png")
+        if name == "Kite Machine 2": self.load_prof = Image.open("../Vista/test.jpg")
         self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_prof = ImageTk.PhotoImage(self.load_prof)
         self.prof_img = Label(self.left_frame, image=self.render_prof)
         self.prof_img.image = self.render_prof
+
 
         # Left frame
         self.left_frame.grid(column=0, row=0, padx=10, pady=10)

@@ -67,3 +67,4 @@ class DataService:
         with open('../assets/SummonerIcons/img.png', 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
+
