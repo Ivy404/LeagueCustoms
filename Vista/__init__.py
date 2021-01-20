@@ -19,7 +19,6 @@ class Win:
         content = ttk.Frame(self.root)
         self.root.title("League Customs")
         self.frame = ttk.Frame(content)
-        entry = ttk.Entry(self.root)
         self.txt = Text(self.root, height=10, width=50)
         self.bt = Button(self.frame, text="Generate!",width=20, command=lambda: self.generate_teams())
         self.ls = Listbox(content, height=5, width=30)

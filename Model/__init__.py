@@ -127,22 +127,6 @@ class PlayerList:
             if x in self.players:
                 order.append((self.players[x].elo, self.players[x]))
         sorted(order)
-        """
-        last = order[0][0]
-        counter = 1
-        ch = 0
-        sol = []
-        import random
-        for x in order[1:]:
-            if x[0] != last:
-                temp = order[ch:counter]
-                random.shuffle(temp)
-                sol += temp
-                ch = counter
-            counter += 1
-        print(order)
-        return [x[1] for x in sol]
-        """
         return [x[1] for x in order]
 
     def __contains__(self, item):

@@ -72,7 +72,6 @@ class DataService:
         except:
             return "../assets/SummonerIcons/default_icon.png"
 
-
     def get_rank(self, name):
         summoner = self.watcher.summoner.by_name(self.region, name)
         try:
