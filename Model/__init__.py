@@ -1,3 +1,5 @@
+from Model import constants
+
 def from_dict(dic):
     p = Player("","")
     p.name = dic["NAME"]
@@ -44,7 +46,7 @@ class Player:
 class Team:
     def __init__(self):
         self.players = list()
-        self.positions = ["TOPLANE", "JUNGLE", "MIDLANE", "BOTTOM", "SUPPORT"]
+        self.positions = constants.positions
 
     def randomize_positions(self):
         import random
