@@ -56,3 +56,6 @@ class DataService:
             dc[x] = self.player_dict[x].to_dict()
         file.write(json.dumps(dc))
         file.close()
+
+    def get_icon(self, name):
+        pass

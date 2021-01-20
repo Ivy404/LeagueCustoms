@@ -3,7 +3,6 @@ from tkinter import *
 from tkinter import ttk
 
 from PIL import ImageTk, Image
-
 from Controller import joined
 import Controller
 
@@ -84,12 +83,49 @@ class Win:
 
 class Profile:
     def __init__(self, root):
+
         self.root = root
-        self.load = Image.open("../Vista/test.jpg")
-        self.render = ImageTk.PhotoImage(self.load)
-        self.img = Label(self.root, image=self.render, height=267, width=267)
-        self.img.image = self.render
-        self.img.grid(column=0,row=0)
+
+        self.outer_frame = Frame(self.root)
+        self.left_frame = Frame(self.outer_frame)
+        self.right_frame = Frame(self.outer_frame)
+        self.role_frame = Frame(self.right_frame)
+
+        # Labels, Combobox, etc.
+        self.name = Label(self.right_frame, text="Kite Machine 2",font="none 24 bold")
+        self.role = Label(self.role_frame, text="Role:")
+        self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=("Top", "Jungle", "Mid", "ADC", "Support"))
+        self.role.grid(column=0, row=0)
+        self.role_combo.grid(column=1, row=0)
+        self.rating = Label(self.role_frame, text="Rating:")
+        self.rating.grid(column=0, row=1)
+
+        # Rank image
+        self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Gold.png")
+        self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
+        self.render_rank = ImageTk.PhotoImage(self.load_rank)
+        self.rank_img = Label(self.left_frame, image=self.render_rank)
+        self.rank_img.image = self.render_rank
+
+        # Profile image
+        self.load_prof = Image.open("../Vista/test.jpg")
+        self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
+        self.render_prof = ImageTk.PhotoImage(self.load_prof)
+        self.prof_img = Label(self.left_frame, image=self.render_prof)
+        self.prof_img.image = self.render_prof
+
+        # Left frame
+        self.left_frame.grid(column=0, row=0, padx=10, pady=10)
+
+        self.rank_img.grid(column=0, row=1)
+        self.prof_img.grid(column=0, row=0)
+
+        # Right frame
+        self.right_frame.grid(column=1, row=0, padx=10, pady=10)
+        self.name.grid(column=0, row=0)
+        self.role_frame.grid(column=0, row=1, pady=50)
+
+        self.outer_frame.pack()
 
 
 rt = Tk()
