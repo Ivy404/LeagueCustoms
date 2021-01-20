@@ -14,7 +14,7 @@ file.close()
 
 class Win:
     def __init__(self, root):
-        self.c = Controller.Controller('RGAPI-fedea5c1-8bdc-42c3-8a8a-27b6e1e1f907', 'euw1')
+        self.c = Controller.Controller('RGAPI-580545bf-2972-45f2-a1df-3bf5e8fe6f96', 'euw1')
         self.root = root
         content = ttk.Frame(self.root)
         self.root.title("League Customs")
@@ -103,6 +103,7 @@ class Profile:
 
         # Labels, Combobox, etc.
 
+        if name == "Kite Machine 2": name = "El Exum"
         self.name = Label(self.right_frame, text=name,font="none 24 bold")
         self.role = Label(self.role_frame, text="Role:")
         self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=("Top", "Jungle", "Mid", "ADC", "Support"))
@@ -121,10 +122,12 @@ class Profile:
         # Profile image
         ctr.get_icon(name)
         self.load_prof = Image.open("../assets/SummonerIcons/img.png")
-        if name == "Kite Machine 2": self.load_prof = Image.open("../Vista/test.jpg")
+        # El Exum
+        if name == "El Exum": self.load_prof = Image.open("../Vista/test.jpg")
+
         self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_prof = ImageTk.PhotoImage(self.load_prof)
-        self.prof_img = Label(self.left_frame, image=self.render_prof)
+        self.prof_img = Label(self.left_frame, image=self.render_prof, relief=SUNKEN, borderwidth=10)
         self.prof_img.image = self.render_prof
 
 

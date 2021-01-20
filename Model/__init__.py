@@ -86,6 +86,7 @@ class CustomGame:
 
     def generate_teams(self):
         exit = False
+        prm = 0.5
         while not exit:
             c = 0
             team1 = Team()
@@ -106,8 +107,10 @@ class CustomGame:
 
             team1.randomize_positions()
             team2.randomize_positions()
-            if abs(team1.rating() - team2.rating()) < 1.5:
+            if abs(team1.rating() - team2.rating()) < (1 + prm):
                 exit = True
+            else:
+                prm += 0.1
         return team1, team2
 
 
