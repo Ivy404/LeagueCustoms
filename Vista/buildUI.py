@@ -212,16 +212,42 @@ class Register:
 
         self.outer_frame = Frame(self.root)
         self.name_frame = Frame(self.outer_frame,height=50, width=420)
-        self.profile_frame = Frame(self.outer_frame, height=500, width=420)
+        self.profile_frame = Frame(self.outer_frame, height=212, width=420)
+        self.button_frame = Frame(self.outer_frame,height=50, width=420)
 
-        self.name_label = Label(self.outer_frame, text="Summoner Name:", font="Helvetica 14")
-        self.name_entry = Entry(self.outer_frame, font = "Helvetica 14 bold")
+        self.name_label = Label(self.name_frame, text="Summoner Name:") # , font="Helvetica 14"
+        self.name_entry = Entry(self.name_frame, width=29) # , font = "Helvetica 11 bold"
+        self.search_button = Button(self.name_frame, text="Search", width=12)
 
         self.name_label.place(x=10,y=10)
-        self.name_entry.place(x=180,y=12)
+        self.name_entry.place(x=124,y=12)
+        self.search_button.place(x=312,y=8)
+
+        self.userName_label = Label(self.profile_frame, text="Summoner Name:")
+        self.userName_label.place(x=128,y=10)
+        self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Unranked.png")
+        self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
+        self.render_rank = ImageTk.PhotoImage(self.load_rank)
+        self.rank_img = Label(self.profile_frame, image=self.render_rank)
+        self.rank_img.image = self.render_rank
+        self.rank_img.place(x=240,y=64)
+        # Profile image
+        self.load_profile = Image.open("../assets/SummonerIcons/default_icon.jpg")
+        self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
+        self.render_profile = ImageTk.PhotoImage(self.load_profile)
+        self.profile_img = Label(self.profile_frame, image=self.render_profile, relief=SUNKEN, borderwidth=10)
+        self.profile_img.image = self.render_profile
+        self.profile_img.place(x=10,y=10)
+
+        self.add_button = Button(self.button_frame, text="Add", width=24)
+        self.add_button.grid(column=0, row=0, padx=16, pady=16, sticky=(N,W,E,S))
+        self.ok_button = Button(self.button_frame, text="Ok", width=24)
+        self.ok_button.grid(column=1, row=0, padx=16, pady=16, sticky=(N,W,E,S))
 
         self.outer_frame.grid(column=0, row=0)
         self.name_frame.grid(column=0, row=0)
+        self.profile_frame.grid(column=0, row=1)
+        self.button_frame.grid(column=0, row=2)
 
 
 class Profile:
@@ -241,7 +267,7 @@ class Profile:
         _role = ctr.get_role(self.name)
         if self.name == "Kite Machine 2": self.name = "El Exum"
 
-        self.nameLabel = Label(self.right_frame, text=self.name, font="none 24 bold")
+        self.nameLabel = Label(self.right_frame, text=name, font="none 24 bold")
         self.role = Label(self.role_frame, text="Role:")
         self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=constants.positions)
         self.role_combo.current(0)
