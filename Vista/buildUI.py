@@ -191,6 +191,7 @@ class MainWindow:
             self.teamRedLabel.config(text="Red Team's Rating -> " + str(int(team2.rating())))
             self.listBlue.update()
             self.listRed.update()
+            self.update_player_list()
 
 class GetFromLobby:
     def __init__(self, root):
