@@ -18,20 +18,21 @@ class MainWindow:
     def __init__(self, root):
         self.c = Controller.Controller('RGAPI-580545bf-2972-45f2-a1df-3bf5e8fe6f96', 'euw1')
         self.root = root
+        self.root.resizable(width=False, height=False)
 
-        self.content = ttk.Frame(self.root, width= 1512, height=1512)
+        self.content = Frame(self.root, width= 1512, height=1512)
         self.root.title("League Customs")
         self.content.grid(column=0, row=0)
 
         # Up left
-        repositoriFrame = ttk.Frame(self.content, width= 128, height=128)
+        repositoriFrame = Frame(self.content, width= 128, height=128)
         repositoriFrame.grid(column=0, row=0, padx=16, pady=16)
         # add user to list
-        addToAll = ttk.Button(repositoriFrame, text='Register')
+        addToAll = Button(repositoriFrame, text='Register', command=lambda: self.update_player_list())
         addToAll.grid(column=0, row=0, sticky=(N,W,E,S))
         # list of all users
         self.listAll = Listbox(repositoriFrame, height=10, width=52)
-        scrollAll = ttk.Scrollbar(repositoriFrame, orient=VERTICAL, command=self.listAll.yview)
+        scrollAll = Scrollbar(repositoriFrame, orient=VERTICAL, command=self.listAll.yview)
         scrollAll.grid(column=1, row=1, sticky=(N,S))
         self.listAll['yscrollcommand'] = scrollAll.set
         self.listAll.grid(column=0, row=1)
@@ -45,26 +46,26 @@ class MainWindow:
             self.listAll.insert('end', i)
 
         # up mid
-        self.mid_bar = ttk.Frame(self.content, width= 128, height=128)
+        self.mid_bar = Frame(self.content, width= 128, height=128)
         self.mid_bar.grid(column=1, row=0, padx=16, pady=16)
         # add user to game
-        self.addToGame = ttk.Button(self.mid_bar, text='Add >>', command=lambda: self.addUser())
+        self.addToGame = Button(self.mid_bar, text='Add >>', command=lambda: self.addUser())
         self.addToGame.grid(column=0, row=0, pady=8)
         # remove user from game
-        self.removeFromGame = ttk.Button(self.mid_bar, text='<< Remove', command=lambda: self.removeUser())
+        self.removeFromGame = Button(self.mid_bar, text='<< Remove', command=lambda: self.removeUser())
         self.removeFromGame.grid(column=0, row=1, pady=8)
-        self.profile = ttk.Button(self.mid_bar, text='Profile', command=lambda: self.show_profile(Profile))
+        self.profile = Button(self.mid_bar, text='Profile', command=lambda: self.show_profile(Profile))
         self.profile.grid(column=0, row=2, pady=8)
-        self.generateGame = ttk.Button(self.mid_bar, text='Generate', command=lambda: self.generate_game())
+        self.generateGame = Button(self.mid_bar, text='Generate', command=lambda: self.generate_game())
         self.generateGame.grid(column=0, row=3, pady=8)
 
 
         # up right
         self.playerNotebook = ttk.Notebook(self.content)
         self.playerNotebook.grid(column=2, row=0, padx=16, pady=16)
-        self.playerFrame = ttk.Frame(self.playerNotebook, width= 128, height=128)
+        self.playerFrame = Frame(self.playerNotebook, width= 128, height=128)
         self.playerFrame.grid(column=0, row=0, padx=16, pady=16)
-        self.lobbyFrame = ttk.Frame(self.playerNotebook,width= 128, height=128)
+        self.lobbyFrame = Frame(self.playerNotebook,width= 128, height=128)
         self.lobbyFrame.grid(column=0, row=0, padx=16, pady=16)
 
         self.playerNotebook.add(self.playerFrame, text="From List", padding=10)
@@ -73,44 +74,41 @@ class MainWindow:
         self.playerNotebook.bind("<<NotebookTabChanged>>", )
         # this should be a scroll list of the users that will play
         self.listPlayers = Listbox(self.playerFrame, height=10, width=52)
-        self.scrollPlayers = ttk.Scrollbar(self.playerFrame, orient=VERTICAL, command=self.listPlayers.yview)
-        self.scrollPlayers.grid(column=1, row=1, sticky=(N,S))
-        self.listPlayers['yscrollcommand'] = self.scrollPlayers.set
         self.listPlayers.grid(column=0, row=1)
 
         # down left
         # this should have all the data for team 1
-        self.teamBlueFrame = ttk.Frame(self.content, width= 128, height=128)
+        self.teamBlueFrame = Frame(self.content, width= 128, height=128)
         self.teamBlueFrame.grid(column=0, row=1)
-        self.teamBlueLabel = ttk.Label(self.teamBlueFrame, text="Blue team")
+        self.teamBlueLabel = Label(self.teamBlueFrame, text="Blue team")
         self.teamBlueLabel.grid(column=0, row=0)
         self.listBlue = Listbox(self.teamBlueFrame, height=5, width=52)
         self.listBlue.grid(column=0, row=1)
 
-        self.laneFrame = ttk.Frame(self.content, width=128, height=128)
+        self.laneFrame = Frame(self.content)
         self.laneFrame.grid(column=1, row=1)
-        self.labeltop = ttk.Label(self.laneFrame, text=" ")
+        self.labeltop = Label(self.laneFrame, text="Lanes", font="Helvetica 10 bold")
         self.labeltop.grid(column=0, row=0)
-        self.labeljung = ttk.Label(self.laneFrame, text="Top")
+        self.labeljung = Label(self.laneFrame, text="Top")
         self.labeljung.grid(column=0, row=1)
-        self.labelmid = ttk.Label(self.laneFrame, text="Jungler")
+        self.labelmid = Label(self.laneFrame, text="Jungler")
         self.labelmid.grid(column=0, row=2)
-        self.labeladc = ttk.Label(self.laneFrame, text="Midlaner")
+        self.labeladc = Label(self.laneFrame, text="Midlaner")
         self.labeladc.grid(column=0, row=3)
-        self.labelsup = ttk.Label(self.laneFrame, text="ADC")
+        self.labelsup = Label(self.laneFrame, text="ADC")
         self.labelsup.grid(column=0, row=4)
-        self.labelsup = ttk.Label(self.laneFrame, text="Support")
+        self.labelsup = Label(self.laneFrame, text="Support")
         self.labelsup.grid(column=0, row=5)
 
         # down right
         # this should have all the data for team 2
-        self.teamRedFrame = ttk.Frame(self.content, width= 128, height=128)
+        self.teamRedFrame = Frame(self.content, width= 128, height=128)
         self.teamRedFrame.grid(column=2, row=1, padx=16, pady=16)
-        self.teamRedLabel = ttk.Label(self.teamRedFrame, text="Red team")
+        self.teamRedLabel = Label(self.teamRedFrame, text="Red team")
         self.teamRedLabel.grid(column=0, row=0)
         self.listRed = Listbox(self.teamRedFrame, height=5, width=52)
         self.listRed.grid(column=0, row=1)
-
+        self.update_player_list()
 
 
     def show_profile(self, _class):
@@ -138,6 +136,11 @@ class MainWindow:
             user = self.listAll.get(self.listAll.curselection()[0])
             UsersGame.add(user)
             self.listPlayers.insert('end', user)
+
+    def update_player_list(self):
+        for i in range(0, self.listAll.size()):
+            if i%2: self.listAll.itemconfigure(i, background='#AEB7B3')
+            else: self.listAll.itemconfigure(i, background='#E1EFE6')
 
     def generate_game(self):
         return
