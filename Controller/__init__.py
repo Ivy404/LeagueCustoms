@@ -1,5 +1,5 @@
 from DataService import DataService
-from Model import PlayerList
+from Model import PlayerList, Player
 from Model import CustomGame
 
 
@@ -48,6 +48,12 @@ class Controller:
 
     def get_rank(self, name):
         return self.data_service.get_rank(name)
+
+    def new_user(self, name):
+        self.player_list.add_player(self.data_service.get_player(name))
+        return self.data_service.get_icon(name),self.data_service.get_rank(name),(name in self.player_list)
+
+
 
 
 # c = Controller('RGAPI-7f36b2d1-e00d-45e8-b38d-0c7ca26ce610', 'euw1')

@@ -209,6 +209,7 @@ class Register:
     def __init__(self, root, ctr):
 
         self.root = root
+        self.ctr = ctr
 
         self.outer_frame = Frame(self.root)
         self.name_frame = Frame(self.outer_frame,height=50, width=420)
@@ -217,14 +218,16 @@ class Register:
 
         self.name_label = Label(self.name_frame, text="Summoner Name:") # , font="Helvetica 14"
         self.name_entry = Entry(self.name_frame, width=29) # , font = "Helvetica 11 bold"
-        self.search_button = Button(self.name_frame, text="Search", width=12)
+        self.search_button = Button(self.name_frame, text="Search", width=14, command= lambda : self.add_func())
 
         self.name_label.place(x=10,y=10)
         self.name_entry.place(x=124,y=12)
-        self.search_button.place(x=312,y=8)
+        self.search_button.place(x=280,y=8)
 
-        self.userName_label = Label(self.profile_frame, text="Summoner Name:")
-        self.userName_label.place(x=128,y=10)
+        self.userName_label = Label(self.profile_frame, text="pitote", justify=CENTER, width=14, font="none 24 bold")
+        self.temp_label = Label(self.profile_frame, text="Summoner Name:", justify=CENTER)
+        self.userName_label.place(x=175,y=24)
+        self.temp_label.place(x=256,y=10)
         self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Unranked.png")
         self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_rank = ImageTk.PhotoImage(self.load_rank)
@@ -239,15 +242,39 @@ class Register:
         self.profile_img.image = self.render_profile
         self.profile_img.place(x=10,y=10)
 
-        self.add_button = Button(self.button_frame, text="Add", width=24)
+        self.add_button = Button(self.button_frame, text="Add", width=24, state=DISABLED)
         self.add_button.grid(column=0, row=0, padx=16, pady=16, sticky=(N,W,E,S))
-        self.ok_button = Button(self.button_frame, text="Ok", width=24)
+        self.ok_button = Button(self.button_frame, text="Ok", width=24, state=DISABLED)
         self.ok_button.grid(column=1, row=0, padx=16, pady=16, sticky=(N,W,E,S))
 
         self.outer_frame.grid(column=0, row=0)
         self.name_frame.grid(column=0, row=0)
         self.profile_frame.grid(column=0, row=1)
         self.button_frame.grid(column=0, row=2)
+
+    def add_func(self):
+        image, rank, isIn = self.ctr.new_user(self.name_entry.get())
+        if(isIn):
+            #self.profile_img.destroy()
+            """self.load_profile = Image.open(image)
+            self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
+            self.render_profile = ImageTk.PhotoImage(self.load_profile)
+            self.profile_img = Label(self.profile_frame, image=self.render_profile, relief=SUNKEN, borderwidth=10)
+            self.profile_img.image = self.render_profile"""
+            self.userName_label.config(text=self.name_entry.get())
+            self.ok_button.config(state=DISABLED)
+            self.add_button.config(state=DISABLED)
+        else:
+            #self.profile_img.destroy()
+            """self.load_profile = Image.open(image)
+            self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
+            self.render_profile = ImageTk.PhotoImage(self.load_profile)
+            self.profile_img = Label(self.profile_frame, image=self.render_profile, relief=SUNKEN, borderwidth=10)
+            self.profile_img.image = self.render_profile"""
+            self.userName_label.config(text=self.name_entry.get())
+            self.ok_button.config(state=ACTIVE)
+            self.add_button.config(state=ACTIVE)
+
 
 
 class Profile:
