@@ -49,10 +49,20 @@ class Controller:
     def get_rank(self, name):
         return self.data_service.get_rank(name)
 
-    def new_user(self, name):
-        self.player_list.add_player(self.data_service.get_player(name))
-        return self.data_service.get_icon(name),self.data_service.get_rank(name),(name in self.player_list)
-
+    def get_user(self, name):
+        if(name in self.player_list):
+            return self.data_service.get_icon(name),self.data_service.get_rank(name),(name in self.player_list)
+        else:
+            try:
+                return self.data_service.get_icon(name), self.data_service.get_rank(name), (name in self.player_list)
+            except:
+                return "../assets/SummonerIcons/default_icon.png", "../assets/ranked_emblems/Emblem_Unranked.png",\
+                       True
+    def add_user(self, name):
+        try:
+            self.player_list.add_player(self.data_service.get_player(name))
+        except:
+            pass
 
 
 

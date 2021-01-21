@@ -218,7 +218,7 @@ class Register:
 
         self.name_label = Label(self.name_frame, text="Summoner Name:") # , font="Helvetica 14"
         self.name_entry = Entry(self.name_frame, width=29) # , font = "Helvetica 11 bold"
-        self.search_button = Button(self.name_frame, text="Search", width=14, command= lambda : self.add_func())
+        self.search_button = Button(self.name_frame, text="Search", width=14, command= lambda : self.get_func())
 
         self.name_label.place(x=10,y=10)
         self.name_entry.place(x=124,y=12)
@@ -252,8 +252,9 @@ class Register:
         self.profile_frame.grid(column=0, row=1)
         self.button_frame.grid(column=0, row=2)
 
-    def add_func(self):
-        image, rank, isIn = self.ctr.new_user(self.name_entry.get())
+    def get_func(self):
+        image, rank, isIn = self.ctr.get_user(self.name_entry.get())
+        self.name = self.name_entry
         if(isIn):
             #self.profile_img.destroy()
             """self.load_profile = Image.open(image)
@@ -274,6 +275,10 @@ class Register:
             self.userName_label.config(text=self.name_entry.get())
             self.ok_button.config(state=ACTIVE)
             self.add_button.config(state=ACTIVE)
+
+    def add_func(self):
+        self.ctr.add_user(self.userName_label.get())
+
 
 
 
