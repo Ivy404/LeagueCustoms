@@ -1,9 +1,13 @@
+import json
 import discord
 import riotwatcher
 
 playersTeam1 = ["Marcos", "Roger", "Ivy", "Buildcrash", "Oscar"]
 playersTeam2 = ["test1", "test2", "test3", "test4", "test5"]
 client = discord.Client()
+json_file = open("C:/Users/Topik/Desktop/GitHub Projects/LeagueCustoms/assets/token.json", "r", encoding= "utf-8")
+token = json.load(json_file)
+json_file.close()
 
 
 @client.event
@@ -37,4 +41,8 @@ async def on_message(message):
 
 
 
-client.run('ODAxODM4Mzg1NzczNjc0NTE2.YAmgMA.scInNrlJnzzB2yjsYHD5IomGIr0')
+
+
+
+
+client.run(token["token"])
