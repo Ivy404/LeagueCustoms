@@ -36,28 +36,21 @@ class MainWindow:
         scrollAll.grid(column=1, row=1, sticky=(N,S))
         self.listAll['yscrollcommand'] = scrollAll.set
         self.listAll.grid(column=0, row=1)
-        playersAll = list()
-        for i in self.c.player_list.players:
-            #listAll.insert('end', i)
-            playersAll.append(i)
-        # playersAll.sort() no se si realmente va bien ordenarlos,
-        # porque pone primero los que empiezan por mayusculas, luego las minusculas
-        for i in playersAll:
-            self.listAll.insert('end', i)
+        self.update_player_list()
 
         # up mid
         self.mid_bar = Frame(self.content, width= 128, height=128)
         self.mid_bar.grid(column=1, row=0, padx=16, pady=16)
         # add user to game
         self.addToGame = Button(self.mid_bar, text='Add >>', command=lambda: self.addUser())
-        self.addToGame.grid(column=0, row=0, pady=8)
+        self.addToGame.grid(column=0, row=0, pady=8, sticky=(W,E))
         # remove user from game
         self.removeFromGame = Button(self.mid_bar, text='<< Remove', command=lambda: self.removeUser())
-        self.removeFromGame.grid(column=0, row=1, pady=8)
+        self.removeFromGame.grid(column=0, row=1, pady=8, sticky=(W,E))
         self.profile = Button(self.mid_bar, text='Profile', command=lambda: self.show_profile(Profile))
-        self.profile.grid(column=0, row=2, pady=8)
+        self.profile.grid(column=0, row=2, pady=8, sticky=(W,E))
         self.generateGame = Button(self.mid_bar, text='Generate', command=lambda: self.generate_game())
-        self.generateGame.grid(column=0, row=3, pady=8)
+        self.generateGame.grid(column=0, row=3, pady=8, sticky=(W,E))
 
 
         # up right
@@ -66,13 +59,16 @@ class MainWindow:
         self.playerFrame = Frame(self.playerNotebook, width= 128, height=128)
         self.playerFrame.grid(column=0, row=0, padx=16, pady=16)
         self.lobbyFrame = Frame(self.playerNotebook,width= 128, height=128)
-        self.lobbyFrame.grid(column=0, row=0, padx=16, pady=16)
+        self.lobbyFrame.grid(column=0, row=0)
+
+        self.txt = Text(self.lobbyFrame, height=10, width=39)
+        self.txt.grid(column=0, row=0)
 
         self.playerNotebook.add(self.playerFrame, text="From List", padding=10)
         self.playerNotebook.add(self.lobbyFrame, text="From Lobby", padding=10)
 
         self.playerNotebook.bind("<<NotebookTabChanged>>", )
-        # this should be a scroll list of the users that will play
+        # this should be a list of the users that will play
         self.listPlayers = Listbox(self.playerFrame, height=10, width=52)
         self.listPlayers.grid(column=0, row=1)
 
@@ -108,7 +104,6 @@ class MainWindow:
         self.teamRedLabel.grid(column=0, row=0)
         self.listRed = Listbox(self.teamRedFrame, height=5, width=52)
         self.listRed.grid(column=0, row=1)
-        self.update_player_list()
 
 
     def show_profile(self, _class):
@@ -136,16 +131,50 @@ class MainWindow:
             user = self.listAll.get(self.listAll.curselection()[0])
             UsersGame.add(user)
             self.listPlayers.insert('end', user)
+            if(self.listAll.curselection()[0]+1 < self.listAll.size()):
+                select = self.listAll.curselection()[0]+1
+                self.listAll.select_clear(select-1)
+                self.listAll.selection_set(select)
 
     def update_player_list(self):
-        for i in range(0, self.listAll.size()):
-            if i%2: self.listAll.itemconfigure(i, background='#AEB7B3')
-            else: self.listAll.itemconfigure(i, background='#E1EFE6')
+        self.listAll.delete(0, END)
+        playersAll = list()
+        for i in self.c.player_list.players:
+            playersAll.append(i)
+        playersAll = sorted(playersAll, key= lambda x:x.lower())
+        j=0
+        for i in playersAll:
+            self.listAll.insert('end', i)
+            if j%2: self.listAll.itemconfigure(j, background='#AEB7B3')
+            else: self.listAll.itemconfigure(j, background='#E1EFE6')
+            j+=1
 
     def generate_game(self):
-        return
-        if(9 < self.listPlayers.size()):
-            #self.c.
+        if(self.playerNotebook.index("current") < 1):
+            #print("generating game from list")
+            if (9 < self.listPlayers.size()):
+                # self.c.
+                self.listBlue.delete(0, END)
+                self.listRed.delete(0, END)
+                lobbyText = ""
+                for p in self.listPlayers.get(0, 10):
+                    lobbyText += p + " joined the lobby\n"
+                f = open("../Controller/text_test", "w", encoding="utf8")
+                print(lobbyText, file=f)
+                f.close()
+
+                team1, team2 = self.c.new_game("../Controller/text_test")
+                self.c.close()
+                for x in team1.players:
+                    self.listBlue.insert('end', x)
+                for x in team2.players:
+                    self.listRed.insert('end', x)
+                self.teamBlueLabel.config(text="Blue Team's Rating -> " + str(int(team1.rating())))
+                self.teamRedLabel.config(text="Red Team's Rating -> " + str(int(team2.rating())))
+                self.listBlue.update()
+                self.listRed.update()
+        else:
+            #print("generating game from lobby")
             self.listBlue.delete(0, END)
             self.listRed.delete(0, END)
             f = open("../Controller/text_test", "w", encoding="utf8")
@@ -158,10 +187,8 @@ class MainWindow:
                 self.listBlue.insert('end', x)
             for x in team2.players:
                 self.listRed.insert('end', x)
-            self.t1.config(text="Team 1's Rating -> " + str(team1.rating()))
-            self.teamBlueLabel.config(text="Team 1's Rating -> " + str(team1.rating()))
-            self.t2.config(text="Team 2's Rating -> " + str(team2.rating()))
-            self.teamRedLabel.config(text="Team 2's Rating -> " + str(team2.rating()))
+            self.teamBlueLabel.config(text="Blue Team's Rating -> " + str(int(team1.rating())))
+            self.teamRedLabel.config(text="Red Team's Rating -> " + str(int(team2.rating())))
             self.listBlue.update()
             self.listRed.update()
 
