@@ -208,25 +208,34 @@ class Profile:
         self.left_frame = Frame(self.outer_frame)
         self.right_frame = Frame(self.outer_frame)
         self.role_frame = Frame(self.right_frame)
+        self.ctr = ctr
+        self.name = name
 
         # Labels, Combobox, etc.
 
         # El Exum
-        if name == "Kite Machine 2": name = "El Exum"
+        _role = ctr.get_role(self.name)
+        if self.name == "Kite Machine 2": self.name = "El Exum"
 
-        self.name = Label(self.right_frame, text=name,font="none 24 bold")
+        self.nameLabel = Label(self.right_frame, text=self.name, font="none 24 bold")
         self.role = Label(self.role_frame, text="Role:")
-        self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=("Top", "Jungle", "Mid", "ADC", "Support"))
+        self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=constants.positions)
+        self.role_combo.current(0)
+        if(_role in constants.positions):
+            self.role_combo.current(constants.positions.index(_role))
         self.role.grid(column=0, row=0)
         self.role_combo.grid(column=1, row=0)
         self.rating = Label(self.role_frame, text="Rating:")
         self.rating.grid(column=0, row=1)
 
+        self.applyButton = Button(self.role_frame, text='Apply', command=lambda: self.update_role())
+        self.applyButton.grid(column=2, row=0)
+
         # Rank image
-        rank = ctr.get_rank(name)
+        rank = ctr.get_rank(self.name)
         self.load_rank = Image.open("../assets/ranked_emblems/Emblem_" + rank[0] + rank[1:len(rank)].lower() + ".png")
         # El Exum
-        if name == "El Exum": self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Challenger.png")
+        if self.name == "El Exum": self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Challenger.png")
 
         self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_rank = ImageTk.PhotoImage(self.load_rank)
@@ -234,10 +243,10 @@ class Profile:
         self.rank_img.image = self.render_rank
 
         # Profile image
-        imgFile = ctr.get_icon(name)
+        imgFile = ctr.get_icon(self.name)
         self.load_prof = Image.open(imgFile)
         # El Exum
-        if name == "El Exum": self.load_prof = Image.open("../assets/SummonerIcons/default_icon.jpg")
+        if self.name == "El Exum": self.load_prof = Image.open("../assets/SummonerIcons/default_icon.jpg")
 
         self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_prof = ImageTk.PhotoImage(self.load_prof)
@@ -253,10 +262,13 @@ class Profile:
 
         # Right frame
         self.right_frame.grid(column=1, row=0, padx=10, pady=10)
-        self.name.grid(column=0, row=0)
+        self.nameLabel.grid(column=0, row=0)
         self.role_frame.grid(column=0, row=1, pady=50)
 
         self.outer_frame.pack()
+
+    def update_role(self):
+        self.ctr.set_role(self.name, self.role_combo.get())
 
 
 rt = Tk()

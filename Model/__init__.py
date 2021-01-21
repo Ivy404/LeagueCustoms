@@ -36,6 +36,9 @@ class Player:
     def set_role(self, role):
         self.role = role
 
+    def get_role(self):
+        return self.role
+
     def __str__(self):
         return self.name
 
@@ -138,5 +141,9 @@ class PlayerList:
     def set_role(self, name, role):
         if name in self.players:
             self.players[name].set_role(role)
+
+    def get_role(self, name):
+        if name in self.players:
+            return self.players[name].get_role()
 
 

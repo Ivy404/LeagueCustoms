@@ -40,6 +40,9 @@ class Controller:
     def set_role(self, name, role):
         self.player_list.set_role(name, role)
 
+    def get_role(self, name):
+        return self.player_list.get_role(name)
+
     def get_icon(self, name):
         return self.data_service.get_icon(name)
 

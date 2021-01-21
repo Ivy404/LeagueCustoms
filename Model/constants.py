@@ -1,1 +1,1 @@
-positions = ["Top", "Jungle", "Mid", "ADC", "Support"]
+positions = ["Autofill", "Top", "Jungle", "Mid", "ADC", "Support"]
