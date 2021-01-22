@@ -213,7 +213,7 @@ class Register:
 
         self.outer_frame = Frame(self.root)
         self.name_frame = Frame(self.outer_frame,height=50, width=475)
-        self.profile_frame = Frame(self.outer_frame, height=212, width=475)
+        self.profile_frame = Frame(self.outer_frame, height=256, width=475)
         self.button_frame = Frame(self.outer_frame,height=50, width=475)
 
         self.name_label = Label(self.name_frame, text="Summoner Name:") # , font="Helvetica 14"
@@ -227,18 +227,21 @@ class Register:
         self.userName_label = Label(self.profile_frame, text="", justify=CENTER, width=16, font="none 24 bold")
         self.temp_label = Label(self.profile_frame, text="Summoner Name:", justify=CENTER)
         self.userName_label.place(x=186,y=24)
-        self.temp_label.place(x=286,y=10)
+        self.temp_label.place(x=296,y=10)
+        self.role_box = ttk.Combobox(self.profile_frame, state=DISABLED, values=constants.positions, width=29)
+        self.role_box.current(0)
+        self.role_box.place(x=10, y=224)
         self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Unranked.png")
         self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_rank = ImageTk.PhotoImage(self.load_rank)
-        self.rank_img = Label(self.profile_frame, image=self.render_rank)
+        self.rank_img = Label(self.profile_frame, image=self.render_rank, width=180, height=180)
         self.rank_img.image = self.render_rank
-        self.rank_img.place(x=272,y=64)
+        self.rank_img.place(x=256,y=64)
         # Profile image
         self.load_profile = Image.open("../assets/SummonerIcons/default_icon.jpg")
         self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
         self.render_profile = ImageTk.PhotoImage(self.load_profile)
-        self.profile_img = Label(self.profile_frame, image=self.render_profile, relief=SUNKEN, borderwidth=10)
+        self.profile_img = Label(self.profile_frame, image=self.render_profile, relief=SUNKEN, borderwidth=10, width=180, height=180)
         self.profile_img.image = self.render_profile
         self.profile_img.place(x=10,y=10)
 
@@ -252,9 +255,11 @@ class Register:
         self.profile_frame.grid(column=0, row=1)
         self.button_frame.grid(column=0, row=2)
 
-    def refresh_image(self, img):
+    def refresh_image(self, img, rnk):
         self.profile_img.config(image=img)
+        self.rank_img.config(image=rnk)
         self.profile_img.image = img
+        self.rank_img.image = rnk
         self.root.update_idletasks()
 
     def search_func(self):
@@ -262,15 +267,20 @@ class Register:
         self.load_profile = Image.open(image)
         self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
         self.render_profile = ImageTk.PhotoImage(self.load_profile)
-        self.refresh_image(self.render_profile)
+        self.load_rank = Image.open(rank)
+        self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
+        self.render_rank = ImageTk.PhotoImage(self.load_rank)
+        self.refresh_image(self.render_profile, self.render_rank)
         if is_in:
             self.userName_label.config(text=self.name_entry.get())
             self.ok_button.config(state=DISABLED)
             self.add_button.config(state=DISABLED)
+            self.role_box.config(state=DISABLED)
         else:
             self.userName_label.config(text=self.name_entry.get())
             self.ok_button.config(state=ACTIVE)
             self.add_button.config(state=ACTIVE)
+            self.role_box.config(state="readonly")
 
 
 class Profile:

@@ -50,11 +50,15 @@ class Controller:
         return self.data_service.get_rank(name)
 
     def get_user(self, name):
+        rank = "../assets/ranked_emblems/Emblem_"
         if name in self.player_list:
-            return self.data_service.get_icon(name),self.data_service.get_rank(name),(name in self.player_list)
+            rank = rank + self.get_rank(name)[0] + self.get_rank(name)[1:].lower() + ".png"
+            return self.data_service.get_icon(name),rank,(name in self.player_list)
         else:
             try:
-                return self.data_service.get_icon(name), self.data_service.get_rank(name), (name in self.player_list)
+                rnm = self.data_service.get_rank(name)
+                rank = rank + rnm[0] + rnm[1:].lower() + ".png"
+                return self.data_service.get_icon(name), rank, (name in self.player_list)
             except:
                 return "../assets/SummonerIcons/default_icon.jpg", "../assets/ranked_emblems/Emblem_Unranked.png",\
                        True
