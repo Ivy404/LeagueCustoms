@@ -21,7 +21,9 @@ class DataService:
         summoner = self.watcher.summoner.by_name(self.region, name)
         player = Model.Player(name, summoner['id'])
         rank = self.watcher.league.by_summoner(self.region, summoner['id'])
-        if rank == []:
+        if summoner['summonerLevel']:
+            player.set_elo("LVL30")
+        elif rank == []:
             player.set_elo("UNRANKED")
         else:
             player.set_elo(rank[0]['tier'])

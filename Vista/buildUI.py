@@ -180,8 +180,8 @@ class MainWindow:
                     self.listBlue.insert('end', x)
                 for x in team2.players:
                     self.listRed.insert('end', x)
-                self.teamBlueLabel.config(text="Blue Team's Rating -> " + str(int(team1.rating())))
-                self.teamRedLabel.config(text="Red Team's Rating -> " + str(int(team2.rating())))
+                self.teamBlueLabel.config(text="Blue Team's Rating -> " + str(team1.rating()))
+                self.teamRedLabel.config(text="Red Team's Rating -> " + str(team2.rating()))
                 self.listBlue.update()
                 self.listRed.update()
         else:
@@ -288,9 +288,8 @@ class Profile:
 
         # El Exum
         _role = ctr.get_role(self.name)
-        if self.name == "Kite Machine 2": self.name = "El Exum"
 
-        self.nameLabel = Label(self.right_frame, text=name, font="none 24 bold")
+        self.nameLabel = Label(self.right_frame, text=self.name, font="none 24 bold")
         self.role = Label(self.role_frame, text="Role:")
         self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=constants.positions)
         self.role_combo.current(0)
@@ -298,34 +297,45 @@ class Profile:
             self.role_combo.current(constants.positions.index(_role))
         self.role.grid(column=0, row=0)
         self.role_combo.grid(column=1, row=0)
-        self.rating = Label(self.role_frame, text="Rating:")
+        self.rating = Label(self.role_frame, text=("Rating: " + str(ctr.get_rating(self.name))))
         self.rating.grid(column=0, row=1)
 
         self.applyButton = Button(self.role_frame, text='Apply', command=lambda: self.update_role())
         self.applyButton.grid(column=2, row=0)
 
         # Rank image
-        rank = ctr.get_rank(self.name)
-        self.load_rank = Image.open("../assets/ranked_emblems/Emblem_" + rank[0] + rank[1:len(rank)].lower() + ".png")
-        # El Exum
-        if self.name == "El Exum": self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Challenger.png")
+        try:
+            rank = ctr.get_rank(self.name)
+            self.load_rank = Image.open("../assets/ranked_emblems/Emblem_" + rank[0] + rank[1:len(rank)].lower() + ".png")
 
-        self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
-        self.render_rank = ImageTk.PhotoImage(self.load_rank)
-        self.rank_img = Label(self.left_frame, image=self.render_rank)
-        self.rank_img.image = self.render_rank
+            self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
+            self.render_rank = ImageTk.PhotoImage(self.load_rank)
+            self.rank_img = Label(self.left_frame, image=self.render_rank)
+            self.rank_img.image = self.render_rank
+        except:
+            # Something went wrong
+            self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Unranked.png")
+            self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
+            self.render_rank = ImageTk.PhotoImage(self.load_rank)
+            self.rank_img = Label(self.left_frame, image=self.render_rank)
+            self.rank_img.image = self.render_rank
 
         # Profile image
-        imgFile = ctr.get_icon(self.name)
-        self.load_prof = Image.open(imgFile)
-        # El Exum
-        if self.name == "El Exum": self.load_prof = Image.open("../assets/SummonerIcons/default_icon.jpg")
+        try:
+            imgFile = ctr.get_icon(self.name)
+            self.load_prof = Image.open(imgFile)
 
-        self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
-        self.render_prof = ImageTk.PhotoImage(self.load_prof)
-        self.prof_img = Label(self.left_frame, image=self.render_prof, relief=SUNKEN, borderwidth=10)
-        self.prof_img.image = self.render_prof
+            self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
+            self.render_prof = ImageTk.PhotoImage(self.load_prof)
+            self.prof_img = Label(self.left_frame, image=self.render_prof, relief=SUNKEN, borderwidth=10)
+            self.prof_img.image = self.render_prof
+        except:
+            self.load_prof = Image.open("../assets/SummonerIcons/default_icon.jpg")
 
+            self.load_prof.thumbnail((128, 128), Image.ANTIALIAS)
+            self.render_prof = ImageTk.PhotoImage(self.load_prof)
+            self.prof_img = Label(self.left_frame, image=self.render_prof, relief=SUNKEN, borderwidth=10)
+            self.prof_img.image = self.render_prof
 
         # Left frame
         self.left_frame.grid(column=0, row=0, padx=10, pady=10)

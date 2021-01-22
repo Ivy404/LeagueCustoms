@@ -58,11 +58,15 @@ class Controller:
             except:
                 return "../assets/SummonerIcons/default_icon.jpg", "../assets/ranked_emblems/Emblem_Unranked.png",\
                        True
+
     def add_user(self, name):
         try:
             self.player_list.add_player(self.data_service.get_player(name))
         except:
             pass
+
+    def get_rating(self, name):
+        return self.player_list.get_rating(name)
 
 
 

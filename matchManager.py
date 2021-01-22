@@ -1,6 +1,6 @@
 from riotwatcher import LolWatcher, ApiError
 
-watcher = LolWatcher('RGAPI-580545bf-2972-45f2-a1df-3bf5e8fe6f96')
+watcher = LolWatcher('RGAPI-179ffd3e-16c3-49fa-b440-6143b07bfc61')
 
 region = 'euw1'
 

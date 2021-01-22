@@ -22,7 +22,7 @@ class Player:
 
     def set_elo(self, elo):
         self.rank = elo
-        if elo == "IRON" or elo == "BRONZE":
+        if elo == "IRON" or elo == "BRONZE" or "LVL30":
             self.elo = 1
         elif elo == "SILVER" or elo == "UNRANKED":
             self.elo = 2
@@ -52,7 +52,7 @@ class Player:
 class Team:
     def __init__(self):
         self.players = list()
-        self.positions = constants.positions
+        self.positions = constants.positions[1:]
 
     def randomize_positions(self):
         import random
@@ -69,7 +69,7 @@ class Team:
                 rating += x.elo*0.5
             rating += x.elo
             c += 1
-        return rating
+        return float(rating)
 
     def get_players(self):
         return self.players
@@ -145,5 +145,8 @@ class PlayerList:
     def get_role(self, name):
         if name in self.players:
             return self.players[name].get_role()
+
+    def get_rating(self, name):
+        return self.players[name].elo
 
 
