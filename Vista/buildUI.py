@@ -212,28 +212,28 @@ class Register:
         self.ctr = ctr
 
         self.outer_frame = Frame(self.root)
-        self.name_frame = Frame(self.outer_frame,height=50, width=420)
-        self.profile_frame = Frame(self.outer_frame, height=212, width=420)
-        self.button_frame = Frame(self.outer_frame,height=50, width=420)
+        self.name_frame = Frame(self.outer_frame,height=50, width=475)
+        self.profile_frame = Frame(self.outer_frame, height=212, width=475)
+        self.button_frame = Frame(self.outer_frame,height=50, width=475)
 
         self.name_label = Label(self.name_frame, text="Summoner Name:") # , font="Helvetica 14"
         self.name_entry = Entry(self.name_frame, width=29) # , font = "Helvetica 11 bold"
-        self.search_button = Button(self.name_frame, text="Search", width=14, command= lambda : self.get_func())
+        self.search_button = Button(self.name_frame, text="Search", width=14, command= lambda : self.search_func())
 
         self.name_label.place(x=10,y=10)
         self.name_entry.place(x=124,y=12)
         self.search_button.place(x=280,y=8)
 
-        self.userName_label = Label(self.profile_frame, text="pitote", justify=CENTER, width=14, font="none 24 bold")
+        self.userName_label = Label(self.profile_frame, text="", justify=CENTER, width=16, font="none 24 bold")
         self.temp_label = Label(self.profile_frame, text="Summoner Name:", justify=CENTER)
-        self.userName_label.place(x=175,y=24)
-        self.temp_label.place(x=256,y=10)
+        self.userName_label.place(x=186,y=24)
+        self.temp_label.place(x=286,y=10)
         self.load_rank = Image.open("../assets/ranked_emblems/Emblem_Unranked.png")
         self.load_rank.thumbnail((128, 128), Image.ANTIALIAS)
         self.render_rank = ImageTk.PhotoImage(self.load_rank)
         self.rank_img = Label(self.profile_frame, image=self.render_rank)
         self.rank_img.image = self.render_rank
-        self.rank_img.place(x=240,y=64)
+        self.rank_img.place(x=272,y=64)
         # Profile image
         self.load_profile = Image.open("../assets/SummonerIcons/default_icon.jpg")
         self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
@@ -252,34 +252,25 @@ class Register:
         self.profile_frame.grid(column=0, row=1)
         self.button_frame.grid(column=0, row=2)
 
-    def get_func(self):
-        image, rank, isIn = self.ctr.get_user(self.name_entry.get())
-        self.name = self.name_entry
-        if(isIn):
-            #self.profile_img.destroy()
-            """self.load_profile = Image.open(image)
-            self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
-            self.render_profile = ImageTk.PhotoImage(self.load_profile)
-            self.profile_img = Label(self.profile_frame, image=self.render_profile, relief=SUNKEN, borderwidth=10)
-            self.profile_img.image = self.render_profile"""
+    def refresh_image(self, img):
+        self.profile_img.config(image=img)
+        self.profile_img.image = img
+        self.root.update_idletasks()
+
+    def search_func(self):
+        image, rank, is_in = self.ctr.get_user(self.name_entry.get())
+        self.load_profile = Image.open(image)
+        self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
+        self.render_profile = ImageTk.PhotoImage(self.load_profile)
+        self.refresh_image(self.render_profile)
+        if is_in:
             self.userName_label.config(text=self.name_entry.get())
             self.ok_button.config(state=DISABLED)
             self.add_button.config(state=DISABLED)
         else:
-            #self.profile_img.destroy()
-            """self.load_profile = Image.open(image)
-            self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
-            self.render_profile = ImageTk.PhotoImage(self.load_profile)
-            self.profile_img = Label(self.profile_frame, image=self.render_profile, relief=SUNKEN, borderwidth=10)
-            self.profile_img.image = self.render_profile"""
             self.userName_label.config(text=self.name_entry.get())
             self.ok_button.config(state=ACTIVE)
             self.add_button.config(state=ACTIVE)
-
-    def add_func(self):
-        self.ctr.add_user(self.userName_label.get())
-
-
 
 
 class Profile:
@@ -303,7 +294,7 @@ class Profile:
         self.role = Label(self.role_frame, text="Role:")
         self.role_combo = ttk.Combobox(self.role_frame,state="readonly", values=constants.positions)
         self.role_combo.current(0)
-        if(_role in constants.positions):
+        if _role in constants.positions:
             self.role_combo.current(constants.positions.index(_role))
         self.role.grid(column=0, row=0)
         self.role_combo.grid(column=1, row=0)

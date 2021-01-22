@@ -14,7 +14,7 @@ file.close()
 
 class Win:
     def __init__(self, root):
-        self.c = Controller.Controller('RGAPI-580545bf-2972-45f2-a1df-3bf5e8fe6f96', 'euw1')
+        self.c = Controller.Controller('RGAPI-179ffd3e-16c3-49fa-b440-6143b07bfc61', 'euw1')
         self.root = root
         content = ttk.Frame(self.root)
         self.root.title("League Customs")
