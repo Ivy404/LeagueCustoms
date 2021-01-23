@@ -4,16 +4,16 @@ from Model import CustomGame
 
 
 def joined(text):
-    f = open(text, encoding="utf-8")
-
-    text = "joined the lobby"
     players = []
-
-    for x in f.readlines():
-        offset = 2 if x[len(x) - 1] == "\n" else 1
-        players.append(x[:len(x) - offset - len(text)])
-    return players[:10]
-
+    txt = text
+    pos = txt.find(" joined the lobby")
+    x = 0
+    while (0 < pos):
+        players.append(txt[:pos])
+        txt = txt[pos + len(" joined the lobby") + 1:]
+        pos = txt.find(" joined the lobby")
+        x += 1
+    return players
 
 class Controller:
     def __init__(self, key, region):
@@ -25,8 +25,8 @@ class Controller:
         for x in self.data_service.player_dict.values():
             self.player_list.add_player(x)
 
-    def new_game(self, text):
-        players = joined(text)
+    def new_game(self, players):
+        # players = joined(text)
         self.data_service.generate_dics(players)
         self.init_lists()
         plist = self.player_list.get_players_by_elo(players)

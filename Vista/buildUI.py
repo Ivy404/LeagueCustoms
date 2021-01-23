@@ -162,19 +162,15 @@ class MainWindow:
 
     def generate_game(self):
         if self.playerNotebook.index("current") < 1:
-            # print("generating game from list")
+
             if 9 < self.listPlayers.size():
-                # self.c.
                 self.listBlue.delete(0, END)
                 self.listRed.delete(0, END)
-                lobbyText = ""
-                for p in self.listPlayers.get(0, 10):
-                    lobbyText += p + " joined the lobby\n"
-                f = open("../Controller/text_test", "w", encoding="utf8")
-                print(lobbyText, file=f)
-                f.close()
+                #lobbyText = ""
+                #for p in self.listPlayers.get(0, 10):
+                #    lobbyText += p + " joined the lobby\n"
 
-                team1, team2 = self.c.new_game("../Controller/text_test")
+                team1, team2 = self.c.new_game(self.listPlayers.get(0,10))
                 self.c.close()
                 for x in team1.players:
                     self.listBlue.insert('end', x)
@@ -188,11 +184,8 @@ class MainWindow:
             # print("generating game from lobby")
             self.listBlue.delete(0, END)
             self.listRed.delete(0, END)
-            f = open("../Controller/text_test", "w", encoding="utf8")
-            print(self.txt.get("1.0", END), file=f)
-            f.close()
 
-            team1, team2 = self.c.new_game("../Controller/text_test")
+            team1, team2 = self.c.new_game(Controller.joined(self.txt.get("1.0", END)))
             self.c.close()
             for x in team1.players:
                 self.listBlue.insert('end', x)
@@ -203,6 +196,14 @@ class MainWindow:
             self.listBlue.update()
             self.listRed.update()
             self.update_player_list()
+            txt = self.txt.get("1.0", END)
+            pos = txt.find(" joined the lobby")
+            while (0 < pos and self.listPlayers.size() < 10):
+                if(not txt[:pos] in UsersGame):
+                    UsersGame.add(txt[:pos])
+                    self.listPlayers.insert('end', txt[:pos])
+                    txt = txt[pos + len(" joined the lobby") + 1:]
+                    pos = txt.find(" joined the lobby")
 
 
 class Register:
