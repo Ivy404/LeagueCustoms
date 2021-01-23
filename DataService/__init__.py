@@ -14,6 +14,7 @@ class DataService:
         for x in self.player_dict:
             self.player_dict[x] = Model.from_dict(self.player_dict[x])
         file.close()
+        print(self.player_dict)
 
     def get_player(self, name):
         if name in self.player_dict:

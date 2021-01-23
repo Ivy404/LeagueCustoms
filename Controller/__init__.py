@@ -63,9 +63,11 @@ class Controller:
                 return "../assets/SummonerIcons/default_icon.jpg", "../assets/ranked_emblems/Emblem_Unranked.png",\
                        True
 
-    def add_user(self, name):
+    def add_user(self, name, role):
         try:
             self.player_list.add_player(self.data_service.get_player(name))
+            self.player_list.set_role(name, role)
+            self.data_service.save_to_file()
         except:
             pass
 

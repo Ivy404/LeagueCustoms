@@ -15,6 +15,7 @@ MaxPlayers = 10
 UsersGame = set()
 
 
+
 class MainWindow:
     def __init__(self, root):
         self.c = Controller.Controller('RGAPI-45572e6e-d70d-46b2-8c7e-862917c2dd92', 'euw1')
@@ -246,7 +247,7 @@ class Register:
         self.profile_img.image = self.render_profile
         self.profile_img.place(x=10,y=10)
 
-        self.add_button = Button(self.button_frame, text="Add", width=24, state=DISABLED)
+        self.add_button = Button(self.button_frame, text="Add", width=24, state=DISABLED, command= lambda : self.add_func())
         self.add_button.grid(column=0, row=0, padx=16, pady=16, sticky=(N,W,E,S))
         self.ok_button = Button(self.button_frame, text="Ok", width=24, state=DISABLED)
         self.ok_button.grid(column=1, row=0, padx=16, pady=16, sticky=(N,W,E,S))
@@ -276,6 +277,12 @@ class Register:
             self.ok_button.config(state=ACTIVE)
             self.add_button.config(state=ACTIVE)
             self.role_box.config(state="readonly")
+
+    def add_func(self):
+        self.ctr.add_user(self.userName_label.cget("text"), self.role_box.get())
+        self.ctr.close()
+        app.update_player_list()
+        pass
 
 
 class Profile:
