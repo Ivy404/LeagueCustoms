@@ -8,6 +8,7 @@ class DataService:
     def __init__(self, APIKey, region):
         self.watcher = LolWatcher(APIKey)
         self.region = region
+        self.version = self.watcher.data_dragon.versions_for_region(self.region)
         player_json = "../assets/player_dictionaries"
         file = open(player_json, "r")
         self.player_dict = json.load(file)
@@ -22,7 +23,7 @@ class DataService:
         summoner = self.watcher.summoner.by_name(self.region, name)
         player = Model.Player(name, summoner['id'])
         rank = self.watcher.league.by_summoner(self.region, summoner['id'])
-        if summoner['summonerLevel']:
+        if summoner['summonerLevel'] <= 30:
             player.set_elo("LVL30")
         elif rank == []:
             player.set_elo("UNRANKED")
@@ -65,7 +66,8 @@ class DataService:
     def get_icon(self, name):
         try:
             summoner = self.watcher.summoner.by_name(self.region, name)
-            iconUrl = 'http://ddragon.leagueoflegends.com/cdn/11.1.1/img/profileicon/' \
+            pfversion = self.version['n']['profileicon']
+            iconUrl = 'http://ddragon.leagueoflegends.com/cdn/'+ pfversion +'/img/profileicon/' \
                       + str(summoner['profileIconId']) + '.png'
             response = requests.get(iconUrl, stream=True)
             with open('../assets/SummonerIcons/img.png', 'wb') as out_file:

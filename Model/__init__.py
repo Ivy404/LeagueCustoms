@@ -22,7 +22,7 @@ class Player:
 
     def set_elo(self, elo):
         self.rank = elo
-        if elo == "IRON" or elo == "BRONZE" or "LVL30":
+        if elo == "IRON" or elo == "BRONZE" or elo == "LVL30":
             self.elo = 1
         elif elo == "SILVER" or elo == "UNRANKED":
             self.elo = 2
