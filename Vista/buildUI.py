@@ -17,7 +17,7 @@ UsersGame = set()
 
 class MainWindow:
     def __init__(self, root):
-        self.c = Controller.Controller('RGAPI-179ffd3e-16c3-49fa-b440-6143b07bfc61', 'euw1')
+        self.c = Controller.Controller('RGAPI-45572e6e-d70d-46b2-8c7e-862917c2dd92', 'euw1')
         self.root = root
         self.root.resizable(width=False, height=False)
 
@@ -255,22 +255,16 @@ class Register:
         self.profile_frame.grid(column=0, row=1)
         self.button_frame.grid(column=0, row=2)
 
-    def refresh_image(self, img, rnk):
-        self.profile_img.config(image=img)
-        self.rank_img.config(image=rnk)
-        self.profile_img.image = img
-        self.rank_img.image = rnk
-        self.root.update_idletasks()
-
     def search_func(self):
         image, rank, is_in = self.ctr.get_user(self.name_entry.get())
         self.load_profile = Image.open(image)
-        self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
-        self.render_profile = ImageTk.PhotoImage(self.load_profile)
+        self.render_profile = ImageTk.PhotoImage(Image.open(image).resize((180, 180), Image.ANTIALIAS))
+        self.profile_img.config(image=self.render_profile)
+        self.profile_img.image = self.render_profile
         self.load_rank = Image.open(rank)
-        self.load_profile.thumbnail((180, 180), Image.ANTIALIAS)
-        self.render_rank = ImageTk.PhotoImage(self.load_rank)
-        self.refresh_image(self.render_profile, self.render_rank)
+        self.render_rank = ImageTk.PhotoImage(Image.open(rank).resize((180, 180), Image.ANTIALIAS))
+        self.rank_img.config(image=self.render_rank)
+        self.rank_img.image = self.render_rank
         if is_in:
             self.userName_label.config(text=self.name_entry.get())
             self.ok_button.config(state=DISABLED)
